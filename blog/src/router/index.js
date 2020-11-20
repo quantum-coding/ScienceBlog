@@ -1,0 +1,52 @@
+import Vue from 'vue'
+import VueRouter from 'vue-router'
+import Home from '../components/Home.vue'
+import Login from '../components/Login.vue'
+import Register from '../components/Register'
+import '../assets/css/global.css'
+import store from '../store/index'
+
+Vue.use(VueRouter)
+
+const routes = [
+    { path: '/', redirect: '/home' },
+    {
+        path: '/home',
+        component: Home,
+        children: [
+            { path: '/login', component: Login },
+            { path: '/register', component: Register }
+        ]
+    }
+]
+
+const router = new VueRouter({
+    routes
+})
+
+router.beforeEach((to, from, next) => {
+    // 获取token值
+    const tokenStr = window.sessionStorage.getItem('token')
+        // 如果要去的是登陆页直接放行
+    if (to.path === '/login' || to.path === '/home' || to.path === '/register') {
+        // 在跳入首页时判断用户的登陆状态，如果没有就显示登陆按钮，隐藏用户信息
+        if (to.path === '/home') {
+            if (!tokenStr) {
+                store.state.showLoginbtn = true
+                store.state.showUser = false
+            } else {
+                store.state.showLoginbtn = false
+                store.state.showUser = true
+            }
+        }
+        if (to.path === '/login') {
+            store.state.showLoginbtn = false
+            store.state.showUser = false
+        }
+        return next()
+    }
+    // 如果token值不存在则强制跳转到登陆页
+    if (!tokenStr) return next('/login')
+    next()
+})
+export default router

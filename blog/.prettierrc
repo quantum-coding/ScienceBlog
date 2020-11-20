@@ -1,0 +1,7 @@
+{
+    "tabWidth": 2,
+    "semi": false,
+    "singleQuote": true,
+    "eslint.autoFixOnSave": true,
+    "prettier.eslintIntegration": true
+}
