@@ -16,6 +16,25 @@ const userSchema = new mongoose.Schema({
         type: String,
         required: true
     },
+    avatar_img: {
+        type: String
+    },
+    age: {
+        type: String
+    },
+    sex: {
+        type: Number
+    },
+    borndate: {
+        type: String
+    },
+    hobbies: {
+        type: String
+    },
+    motto: {
+        type: String
+    },
+
 });
 //创建用户集合
 const Users = mongoose.model("Users", userSchema)

@@ -1,6 +1,5 @@
 // 引入express框架
 var express = require("express")
-const { userInfo } = require("os")
 var router = express.Router()
 
 //引入用户集合构造函数
@@ -14,7 +13,8 @@ router.post("/", async(req, res) => {
         await Users.create({
             email: email,
             username: username,
-            password: password
+            password: password,
+            avatar_img: 'https://cube.elemecdn.com/3/7c/3ea6beec64369c2642b92c6726f1epng.png'
         })
         req.body.meta = {
             msg: "注册成功",

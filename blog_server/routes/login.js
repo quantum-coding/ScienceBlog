@@ -17,7 +17,9 @@ router.post('/', async(req, res) => {
             req.body.meta = {
                 'msg': '登录成功',
                 'status': 200,
-                'username': user.username
+                'username': user.username,
+                'avatar': user.avatar_img,
+                'userId': user.id
             }
 
             // 为用户分配一个token值

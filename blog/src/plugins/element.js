@@ -13,7 +13,12 @@ import {
     DropdownMenu,
     DropdownItem,
     Avatar,
-    Upload
+    Upload,
+    DatePicker,
+    Col,
+    RadioGroup,
+    Radio,
+    Dialog
 } from 'element-ui'
 
 Vue.use(Button)
@@ -29,5 +34,10 @@ Vue.use(DropdownMenu)
 Vue.use(DropdownItem)
 Vue.use(Avatar)
 Vue.use(Upload)
+Vue.use(DatePicker)
+Vue.use(Col)
+Vue.use(RadioGroup)
+Vue.use(Radio)
+Vue.use(Dialog)
 
 Vue.prototype.$message = Message

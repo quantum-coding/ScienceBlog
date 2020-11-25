@@ -23,7 +23,6 @@
 </template>
 
 <script>
-import $ from 'jquery'
 export default {
   data() {
     return {
@@ -47,14 +46,20 @@ export default {
       this.$refs.loginFormRef.validate(async valid => {
         if (!valid) return
         const { data: res } = await this.$http.post('login', this.loginForm)
-        console.log(res)
         if (res.status !== 200) return this.$message.error(res.msg)
         this.$message.success(res.msg)
         // 存储token值
         window.sessionStorage.setItem('token', res.token)
         // 显示用户名称以及头像
         this.$store.state.showUser = true
-        this.$store.state.userInfo.username = res.username
+        // 存储用户的用户名并显示在页面上
+        window.sessionStorage.setItem('username', res.username)
+        this.$store.state.userInfo.username = window.sessionStorage.getItem('username')
+        // 存储用户的头像图片并显示在页面上
+        window.sessionStorage.setItem('avatar', res.avatar)
+        this.$store.state.userInfo.avatar = window.sessionStorage.getItem('avatar')
+        // 存储用户的Id
+        window.sessionStorage.setItem('userId', res.userId)
         this.$router.push('/home')
       })
     },

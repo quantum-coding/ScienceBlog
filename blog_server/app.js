@@ -44,5 +44,17 @@ const registerRouter = require('./routes/register')
 // 当发送注册请求时调用注册模块
 app.use('/routes/register', registerRouter)
 
+// 引入头像上传模块
+const avatarRouter = require('./routes/avatar')
+
+// 当发送头像上传请求时调用头像上传模块
+app.use('/routes/avatar', avatarRouter)
+
+// 引入用户信息获取模块模块
+const userInfoRouter = require('./routes/userInfo')
+
+// 当获取用户信息时调用该模块
+app.use('/routes/userInfo', userInfoRouter)
+
 app.listen(8888)
 console.log('网站服务器启动成功')

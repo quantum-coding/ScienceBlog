@@ -4,7 +4,6 @@ import router from './router'
 import store from './store'
 import './plugins/element.js'
 import 'element-ui/lib/theme-chalk/index.css'
-import $ from 'jquery'
 
 import axios from 'axios'
 

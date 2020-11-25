@@ -8,7 +8,8 @@ export default new Vuex.Store({
         showLoginbtn: true, // 登陆状态
         showUser: false, // 用户显示状态
         userInfo: {
-            username: ''
+            username: '',
+            avatar: ''
         }
     },
     mutations: {},
