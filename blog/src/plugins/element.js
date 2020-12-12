@@ -18,7 +18,14 @@ import {
     Col,
     RadioGroup,
     Radio,
-    Dialog
+    Dialog,
+    Menu,
+    Submenu,
+    MenuItemGroup,
+    MenuItem,
+    Tag,
+    Select,
+    Option
 } from 'element-ui'
 
 Vue.use(Button)
@@ -39,5 +46,12 @@ Vue.use(Col)
 Vue.use(RadioGroup)
 Vue.use(Radio)
 Vue.use(Dialog)
+Vue.use(Menu)
+Vue.use(Submenu)
+Vue.use(MenuItemGroup)
+Vue.use(MenuItem)
+Vue.use(Tag)
+Vue.use(Select)
+Vue.use(Option)
 
 Vue.prototype.$message = Message

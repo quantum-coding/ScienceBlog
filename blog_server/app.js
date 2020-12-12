@@ -9,6 +9,8 @@ const bodyParser = require('body-parser')
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 
+app.use('/article_img', express.static('article_img'))
+
 //解决前端跨域问题
 app.all('*', (req, res, next) => {
     res.header("Access-Control-Allow-Origin", req.headers.origin || '*');
@@ -56,5 +58,13 @@ const userInfoRouter = require('./routes/userInfo')
 // 当获取用户信息时调用该模块
 app.use('/routes/userInfo', userInfoRouter)
 
-app.listen(8888)
+// 引入文章上传模块模块
+const articleRouter = require('./routes/article')
+
+// 当发布时调用该模块
+app.use('/routes/article', articleRouter)
+
+app.listen(8888, () => {
+    console.log("sever running at http://127.0.0.1")
+})
 console.log('网站服务器启动成功')

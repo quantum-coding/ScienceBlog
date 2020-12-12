@@ -13,9 +13,15 @@
         >
         <el-dropdown v-show="this.$store.state.showUser">
           <span>
-            <span class='username'>{{ this.$store.state.userInfo.username }}</span>
+            <span class="username">{{
+              this.$store.state.userInfo.username
+            }}</span>
             <el-avatar>
-              <img class='pic' :src="this.$store.state.userInfo.avatar" alt="" />
+              <img
+                class="pic"
+                :src="this.$store.state.userInfo.avatar"
+                alt=""
+              />
             </el-avatar>
             <i class="el-icon-arrow-down el-icon--right"></i>
           </span>
@@ -23,6 +29,7 @@
             <el-dropdown-item @click.native="showInfo"
               >个人中心</el-dropdown-item
             >
+            <el-dropdown-item @click.native="manage">创作中心</el-dropdown-item>
             <el-dropdown-item @click.native="logout">退出登录</el-dropdown-item>
           </el-dropdown-menu>
         </el-dropdown>
@@ -52,7 +59,9 @@ export default {
       // 如果登录了保存用户的登陆状态
       this.$store.state.showLoginbtn = false
       this.$store.state.showUser = true
-      this.$store.state.userInfo.username = window.sessionStorage.getItem('username')
+      this.$store.state.userInfo.username = window.sessionStorage.getItem(
+        'username'
+      )
     }
     this.$store.state.userInfo.avatar = window.sessionStorage.getItem('avatar')
   },
@@ -71,6 +80,9 @@ export default {
     },
     showInfo() {
       this.$router.push('/info')
+    },
+    manage() {
+      this.$router.push('/manage')
     }
   }
 }
@@ -82,6 +94,8 @@ export default {
   height: 100%;
 }
 .el-header {
+  z-index: 9999;
+  position: fixed;
   width: 100%;
   height: 60px !important;
   line-height: 60px;
@@ -113,15 +127,12 @@ export default {
     font-size: 20px;
     cursor: pointer;
   }
-  .username {
-    margin-right: 50px;
-  }
   .el-avatar {
-    position: absolute;
-    margin-left: 65px;
+    position: relative;
+    overflow: hidden;
   }
   .el-avatar > img {
-    position: absolute;
+    position: relative;
     left: 50%;
     transform: translate(-50%, 0);
   }
@@ -130,6 +141,10 @@ export default {
     font-weight: 500;
     font-family: 'Microsoft Yahei';
   }
+}
+.el-main {
+  background-color: #F6F6F6;
+  margin-top: 60px;
 }
 .el-footer {
   background-color: #282b2d;

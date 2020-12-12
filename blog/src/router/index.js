@@ -4,6 +4,11 @@ import Home from '../components/Home.vue'
 import Login from '../components/Login.vue'
 import Register from '../components/Register.vue'
 import Info from '../components/Info.vue'
+import Manage from '../components/manage/Manage.vue'
+import NewArticle from '../components/manage/NewArticle'
+import Write from '../components/manage/Write'
+import PublishedArticle from '../components/manage/PublishedArticle'
+import ArticleDetail from '../components/ArticleDetail'
 import '../assets/css/global.css'
 import store from '../store/index'
 
@@ -17,9 +22,19 @@ const routes = [
         children: [
             { path: '/login', component: Login },
             { path: '/register', component: Register },
-            { path: '/info', component: Info }
+            { path: '/info', component: Info },
+            {
+                path: '/manage',
+                component: Manage,
+                children: [
+                    { path: '/newArticle', component: NewArticle },
+                    { path: '/publishedArticle', component: PublishedArticle }
+                ]
+            },
+            { path: '/articleDetail/:id', component: ArticleDetail }
         ]
-    }
+    },
+    { path: '/write', component: Write }
 ]
 
 const router = new VueRouter({

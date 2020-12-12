@@ -18,7 +18,7 @@ module.exports = {
         "no-trailing-spaces": ["error", { skipBlankLines: true }],
         "eol-last": 0,
         "keyword-spacing": 0,
-        "no-unused-vars": 0
-
+        "no-unused-vars": 0,
+        "eqeqeq": ["off"]
     }
 };
