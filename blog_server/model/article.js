@@ -35,7 +35,13 @@ const articleSchema = new mongoose.Schema({
     },
     likeUsers: {
         type: Array
-    }
+    },
+    collectCount: {
+        type: String
+    },
+    collectUsers: {
+        type: Array
+    },
 });
 
 //创建文章集合

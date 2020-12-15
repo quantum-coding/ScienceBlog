@@ -72,7 +72,7 @@ export default {
 
 <style lang="less" scoped>
 .login_container {
-  height: 100%;
+  height: 400px;
   position: relative;
 }
 
@@ -98,6 +98,10 @@ export default {
   box-sizing: border-box;
   padding-right: 40px;
   padding-top: 70px;
+}
+
+.el-footer {
+  margin-top: 0;
 }
 
 @keyframes fade-in {

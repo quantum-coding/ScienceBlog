@@ -25,7 +25,9 @@ import {
     MenuItem,
     Tag,
     Select,
-    Option
+    Option,
+    MessageBox,
+    Backtop
 } from 'element-ui'
 
 Vue.use(Button)
@@ -53,5 +55,7 @@ Vue.use(MenuItem)
 Vue.use(Tag)
 Vue.use(Select)
 Vue.use(Option)
+Vue.use(Backtop)
 
 Vue.prototype.$message = Message
+Vue.prototype.$alert = MessageBox.alert

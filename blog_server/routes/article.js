@@ -8,6 +8,10 @@ var upload_config = require("config").get("upload_config");
 
 //引入用户集合构造函数
 const { Article } = require("../model/article");
+
+// 引入评论集合构造函数
+const { Comment } = require("../model/comment");
+
 router.post("/", (req, res) => {
     const {
         coverImg,
@@ -83,13 +87,12 @@ router.get("/articleDetail/:id", async(req, res) => {
     const id = req.params.id;
     // 根据id查找文章数据
     let article = await Article.findOne({ _id: id });
+    // 获取评论数据
+    let comments = await Comment.find({ aid: id }).populate("uid");
     // 将文章数据赋给请求体
-    req.body = article;
+    req.body = { article, comments };
     res.send(req.body);
 });
-
-
-
 
 // 文章点赞功能
 router.post("/articleDetail/addCount/:id", async(req, res) => {
@@ -99,7 +102,7 @@ router.post("/articleDetail/addCount/:id", async(req, res) => {
     // 根据文章id查找文章
     let article = await Article.findOne({ _id: id });
     if (article) {
-        article.likeUsers.push(likeUsers)
+        article.likeUsers.push(likeUsers);
         await Article.updateMany({ _id: id }, { totalCount: totalCount, likeUsers: article.likeUsers });
     }
     console.log(article);
@@ -121,4 +124,36 @@ router.put("/articleDetail/minusCount/:id", async(req, res) => {
     }
     res.send(req.body);
 });
+
+// 文章收藏功能
+router.post("/articleDetail/addCollectCount/:id", async(req, res) => {
+    // 获取文章的id
+    const id = req.params.id;
+    const { totalCount, collectUsers } = req.body;
+    // 根据文章id查找文章
+    let article = await Article.findOne({ _id: id });
+    if (article) {
+        article.collectUsers.push(collectUsers);
+        await Article.updateMany({ _id: id }, { collectCount: totalCount, collectUsers: article.collectUsers });
+    }
+    console.log(article);
+    res.send(req.body);
+});
+
+// 文章取消收藏
+router.put("/articleDetail/minusCollectCount/:id", async(req, res) => {
+    // 获取文章的id
+    const id = req.params.id;
+    const { totalCount, collectUsers } = req.body;
+    // 根据文章id查找文章
+    let article = await Article.findOne({ _id: id });
+    if (article) {
+        // 获取已点赞用户的索引
+        let index = article.collectUsers.indexOf(collectUsers);
+        article.collectUsers.splice(index, 1);
+        await Article.updateMany({ _id: id }, { collectCount: totalCount, collectUsers: article.collectUsers });
+    }
+    res.send(req.body);
+});
+
 module.exports = router;

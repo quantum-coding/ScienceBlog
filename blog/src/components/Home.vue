@@ -36,9 +36,11 @@
       </div>
     </el-header>
     <el-main>
-      <router-view></router-view>
+      <div class="content">
+        <router-view></router-view>
+      </div>
+      <el-footer></el-footer>
     </el-main>
-    <el-footer></el-footer>
   </el-container>
 </template>
 
@@ -143,10 +145,23 @@ export default {
   }
 }
 .el-main {
-  background-color: #F6F6F6;
+  padding-left: 0;
+  padding-right: 0;
+  padding-bottom: 0;
+  position: relative;
+  background-color: #f6f6f6;
   margin-top: 60px;
 }
+
+.content {
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
 .el-footer {
+  width: 100%;
+  margin-top: 300px;
+  position: relative;
   background-color: #282b2d;
 }
 </style>

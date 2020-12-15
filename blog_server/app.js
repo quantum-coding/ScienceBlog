@@ -61,8 +61,14 @@ app.use('/routes/userInfo', userInfoRouter)
 // 引入文章上传模块模块
 const articleRouter = require('./routes/article')
 
-// 当发布时调用该模块
+// 当发布文章时调用该模块
 app.use('/routes/article', articleRouter)
+
+// 引入评论上传模块
+const commentRouter = require('./routes/comment')
+
+// 当上传评论时调用该模块
+app.use('/routes/comment', commentRouter)
 
 app.listen(8888, () => {
     console.log("sever running at http://127.0.0.1")
