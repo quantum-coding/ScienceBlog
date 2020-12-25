@@ -56,6 +56,7 @@ vue全家桶,elementUI
 最看重逻辑思维。api什么的忘了可以去查，最重要的是遇到一个需求该怎么解决问题，否则学再多的api也是徒劳。
 
 如果要预览我的项目可以访问以下地址：
+https://www.bilibili.com/video/BV1z54y1t7Rh
 
 
 
