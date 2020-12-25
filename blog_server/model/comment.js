@@ -18,6 +18,9 @@ const commentSchema = new mongoose.Schema({
     },
     content: {
         type: String
+    },
+    new: {
+        type: Boolean
     }
 });
 

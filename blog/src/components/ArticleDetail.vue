@@ -3,7 +3,7 @@
     <div class="article">
       <h1>{{ article.title }}</h1>
       <div class="describe">
-        <span class="author">{{ article.author }}</span>
+        <span class="author">{{ article.author.username }}</span>
         <span class="publishDate">{{ article.publishDate }}</span>
         <div>
           <span class="variety"
@@ -73,7 +73,11 @@
         </ul>
       </div>
     </div>
-    <el-backtop target=".el-main" :bottom="100" :visibility-height="200" :right="150"
+    <el-backtop
+      target=".el-main"
+      :bottom="100"
+      :visibility-height="200"
+      :right="150"
       ><i class="el-icon-caret-top"></i
     ></el-backtop>
   </div>
@@ -94,7 +98,11 @@ export default {
   data() {
     return {
       // 获取文章的信息
-      article: {},
+      article: {
+        author: {
+          username: ''
+        }
+      },
       // 判断用户是否点赞
       isLike: false,
       // 判断用户是否收藏
@@ -128,14 +136,25 @@ export default {
       // 显示评论数的变量
       commentsCount: '',
       // 是否显示评论数的变量
-      showCommentCount: false
+      showCommentCount: false,
+      // 告知用户有新评论的消息对象
+      commentMsg: {
+        aid: '',
+        uid: '',
+        content: '',
+        authorId: ''
+      }
     }
   },
   mounted() {
     // 获取页面携带的id
     const id = this.$route.params.id
     // 监听页面滚动事件
-    window.addEventListener('scroll', this.handleScroll, true)
+    window.addEventListener(
+      'scroll',
+      this.debounce(this.handleScroll, 300),
+      true
+    )
     this.avatar = window.sessionStorage.getItem('avatar')
     // 获取文章的详细信息
     this.getArticleDetail(id)
@@ -160,6 +179,13 @@ export default {
     }
   },
   methods: {
+    debounce(fn, delay) {
+      let timer
+      return function() {
+        clearTimeout(timer)
+        timer = setTimeout(fn, delay)
+      }
+    },
     // 点击收藏按钮时触发的事件
     async collect() {
       this.isCollected = !this.isCollected
@@ -215,7 +241,17 @@ export default {
       // 将用户的评论上传至后台
       await this.$http.post('/comment', this.commentUser)
 
+      this.commentMsg.aid = this.$route.params.id
+
+      this.commentMsg.content = this.comContent
+
+      this.commentMsg.uid = window.sessionStorage.getItem('userId')
+
+      this.commentMsg.authorId = this.article.author._id
+
       this.getArticleDetail(this.$route.params.id)
+
+      await this.$http.post('/message/commentMsg', this.commentMsg)
     },
     scrollTocommit() {
       // scrollTop 代表的是被选元素垂直滚动条对应的位置
@@ -251,6 +287,7 @@ export default {
         `/article/articleDetail/${articleId}`
       )
       this.article = res.article
+      console.log(this.article)
       this.commentList = res.comments
       this.count = this.article.totalCount
       this.collectCount = this.article.collectCount
@@ -449,6 +486,11 @@ i {
   margin-top: 10px;
   padding-left: 20px;
   clear: both;
+  .el-avatar > img {
+    position: relative;
+    left: 50%;
+    transform: translate(-50%, 0);
+  }
 }
 
 .el-avatar {

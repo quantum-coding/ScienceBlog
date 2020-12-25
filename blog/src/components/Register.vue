@@ -29,9 +29,9 @@ export default {
   data() {
     return {
       registerForm: {
-        email: '1746128609@qq.com',
-        username: 'admin',
-        password: '123456'
+        email: '',
+        username: '',
+        password: ''
       },
       registerFormRules: {
         email: [
@@ -50,6 +50,9 @@ export default {
         ]
       }
     }
+  },
+  created() {
+    this.$store.state.showLoginbtn = false
   },
   methods: {
     register() {
@@ -71,7 +74,7 @@ export default {
 
 <style lang="less" scoped>
 .register_container {
-  height: 100%;
+  height: 500px;
   position: relative;
 }
 

@@ -2,6 +2,7 @@
 var express = require('express')
 var router = express.Router()
 const createToken = require('../model/token')
+const bcrypt = require('bcrypt')
 
 //引入用户集合构造函数
 const { Users } = require('../model/users')
@@ -13,7 +14,8 @@ router.post('/', async(req, res) => {
     let user = await Users.findOne({ email })
 
     if (user) {
-        if (password == user.password) {
+        let isEqual = await bcrypt.compare(password, user.password)
+        if (isEqual) {
             req.body.meta = {
                 'msg': '登录成功',
                 'status': 200,

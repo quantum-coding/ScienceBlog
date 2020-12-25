@@ -20,10 +20,10 @@
             @click="savNavPath('/' + subItem.path)"
           >
             <template slot="title">
-              <!-- 图标 -->
-              <i class="el-icon-menu"></i>
-              <!-- 文本 -->
-              <span>{{ subItem.title }}</span>
+                <!-- 图标 -->
+                <i class="el-icon-menu"></i>
+                <!-- 文本 -->
+                <span>{{ subItem.title }}</span>
             </template>
           </el-menu-item>
         </el-submenu>
@@ -52,7 +52,7 @@ export default {
           id: '2',
           children: [
             { title: '已发布的文章', id: '2-1', path: 'publishedArticle' },
-            { title: '草稿箱', id: '2-2', path: 'draftbox' }
+            { title: '草稿箱', id: '2-2', path: 'draftBox' }
           ]
         },
         {
@@ -62,16 +62,19 @@ export default {
         }
       ],
       // 用户在菜单的选中项
-      activePath: ''
+      activePath: '',
+      // 是否隐藏通知红点
+      hide: true
     }
   },
   created() {
     this.activePath = window.sessionStorage.getItem('activePath')
   },
   methods: {
-    savNavPath(activePath) {
+    savNavPath(activePath, index) {
       window.sessionStorage.setItem('activePath', activePath)
       this.activePath = activePath
+      console.log(this.index)
     }
   }
 }
@@ -107,9 +110,11 @@ export default {
     opacity: 1;
   }
 }
+
 .showbox {
   width: 940px;
   height: 800px;
   margin-left: 250px;
 }
+
 </style>

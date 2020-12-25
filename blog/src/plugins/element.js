@@ -27,7 +27,12 @@ import {
     Select,
     Option,
     MessageBox,
-    Backtop
+    Backtop,
+    Pagination,
+    Card,
+    Table,
+    TableColumn,
+    Badge,
 } from 'element-ui'
 
 Vue.use(Button)
@@ -56,6 +61,11 @@ Vue.use(Tag)
 Vue.use(Select)
 Vue.use(Option)
 Vue.use(Backtop)
+Vue.use(Pagination)
+Vue.use(Card)
+Vue.use(Table)
+Vue.use(TableColumn)
+Vue.use(Badge)
 
 Vue.prototype.$message = Message
 Vue.prototype.$alert = MessageBox.alert

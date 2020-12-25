@@ -1,6 +1,18 @@
 // 引入express框架
 var express = require("express");
 var router = express.Router();
+const jwt = require("jsonwebtoken");
+
+router.use(function(req, res, next) {
+    let token = req.headers.authorization;
+    jwt.verify(token, "huangwenchuan", function(err, decode) {
+        if (err) {
+            res.send("无效token");
+        } else {
+            next();
+        }
+    });
+});
 
 //引入用户集合构造函数
 const { Users } = require("../model/users");
@@ -44,7 +56,6 @@ router.post("/:id", async(req, res) => {
             hobbies: hobbies,
             motto: motto,
         });
-        console.log(user);
     }
 });
 

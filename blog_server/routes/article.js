@@ -5,6 +5,7 @@ var fs = require("fs");
 var path = require("path");
 const multer = require("multer");
 var upload_config = require("config").get("upload_config");
+const pagnation = require("mongoose-sex-page");
 
 //引入用户集合构造函数
 const { Article } = require("../model/article");
@@ -12,7 +13,7 @@ const { Article } = require("../model/article");
 // 引入评论集合构造函数
 const { Comment } = require("../model/comment");
 
-router.post("/", (req, res) => {
+router.post("/", async(req, res) => {
     const {
         coverImg,
         title,
@@ -22,7 +23,7 @@ router.post("/", (req, res) => {
         author,
         content,
     } = req.body;
-    Article.create({
+    let result = await Article.create({
         coverImg: coverImg,
         title: title,
         publishDate: publishdate,
@@ -31,7 +32,7 @@ router.post("/", (req, res) => {
         author: author,
         content: content,
     });
-    res.send("文章上传成功");
+    res.send(result);
 });
 
 // 用户上传图片的路由
@@ -75,9 +76,55 @@ function uploadFile(req, res, next) {
     });
 }
 
-// 获取文章列表
-router.get("/", async(req, res) => {
-    let result = await Article.find();
+router.get("/getArticleList/:currentPage", async(req, res) => {
+    const pageNumber = req.params.currentPage;
+    let result = await pagnation(Article)
+        .page(pageNumber)
+        .size(10)
+        .find()
+        .sort({ publishDate: -1 })
+        .populate("author")
+        .exec();
+    res.send(result);
+});
+
+router.get("/search/:searchContent", async(req, res) => {
+    const searchContent = req.params.searchContent;
+    let result = await pagnation(Article)
+        .page()
+        .size(10)
+        .find({ title: { $regex: searchContent, $options: "$i" } })
+        .populate("author")
+        .exec();
+    res.send(result);
+});
+
+router.get("/hotArticles", async(req, res) => {
+    let result = await Article.find()
+        .sort({ totalCount: -1 })
+        .populate("author")
+        .limit(5);
+    res.send(result);
+});
+
+router.post("/getSearchedArticles", async(req, res) => {
+    const { searchContent, searchPage } = req.body;
+    let result = await pagnation(Article)
+        .page(searchPage)
+        .size(10)
+        .find({ title: { $regex: searchContent, $options: "$i" } })
+        .populate("author")
+        .exec();
+    res.send(result);
+});
+
+// 获取用户写的文章列表
+router.post("/:id", async(req, res) => {
+    // 获取文章的id
+    const authorId = req.params.id;
+    const { currentPage } = req.body;
+    console.log(currentPage)
+    let result = await pagnation(Article).page(currentPage).size(4).find({ author: authorId }).populate("author").exec();
     res.send(result);
 });
 
@@ -86,9 +133,11 @@ router.get("/articleDetail/:id", async(req, res) => {
     // 获取文章的id
     const id = req.params.id;
     // 根据id查找文章数据
-    let article = await Article.findOne({ _id: id });
+    let article = await Article.findOne({ _id: id }).populate("author");
     // 获取评论数据
-    let comments = await Comment.find({ aid: id }).populate("uid");
+    let comments = await Comment.find({ aid: id })
+        .sort({ time: -1 })
+        .populate("uid");
     // 将文章数据赋给请求体
     req.body = { article, comments };
     res.send(req.body);

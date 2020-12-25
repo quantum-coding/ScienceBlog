@@ -32,9 +32,6 @@
         <el-form-item label="用户名" prop="username">
           <el-input v-model="userInfo.username"></el-input>
         </el-form-item>
-        <el-form-item label="密码" prop="password">
-          <el-input type="password" v-model="userInfo.password"></el-input>
-        </el-form-item>
         <el-form-item label="出生日期" prop="borndate">
           <el-col :span="11">
             <el-date-picker
@@ -117,7 +114,6 @@ export default {
       userInfo: {
         email: '',
         username: '',
-        password: '',
         borndate: '',
         age: '',
         sex: '',
@@ -147,37 +143,52 @@ export default {
       const { data: res } = await this.$http.get(`userInfo/${this.userId}`)
       this.userInfo.email = res.email
       this.userInfo.username = res.username
-      this.userInfo.password = res.password
       this.userInfo.borndate = res.borndate
       this.userInfo.age = res.age
       this.userInfo.sex = res.sex
       this.userInfo.hobbies = res.hobbies
       this.userInfo.motto = res.motto
     },
-    upLoad(file) {
-      this.getBase64(file.raw).then(async parserResult => {
+    async upLoad(file) {
+      await this.getBase64(file.raw).then(async parserResult => {
         this.imgCode.base64 = parserResult
         // 将更新后的图片存浏览器缓存中
         window.sessionStorage.setItem('avatar', this.imgCode.base64)
         // 实时更新用户头像
         this.$store.state.userInfo.avatar = window.sessionStorage.getItem(
-          'avatar',
-          this.imgCode.base64
+          'avatar'
         )
-        // 根据用户id更新后台用户的头像
-        const { data: res } = await this.$http.put(
-          `avatar/${this.userId}`,
-          this.imgCode
-        )
-        if (res.status !== 200) return this.$message.error(res.msg)
-        this.$message.success(res.msg)
       })
+      // 根据用户id更新后台用户的头像
+      const { data: res } = await this.$http.post(
+        `avatar/${this.userId}`,
+        this.imgCode
+      )
+      console.log(await this.$http.post(
+        `avatar/${this.userId}`,
+        this.imgCode
+      ))
+      if (res.status !== 200) {
+        return this.$message({ message: res.msg, type: 'error', offset: 80 })
+      }
+      this.$message({ message: res.msg, type: 'success', offset: 80 })
     },
     async submit() {
       // 提交信息
       this.dialogVisible = false
       this.disabled = true
-      await this.$http.post(`userInfo/${this.userId}`, this.userInfo)
+      window.sessionStorage.setItem('username', this.userInfo.username)
+      this.$store.state.userInfo.username = window.sessionStorage.getItem(
+        'username'
+      )
+      const { data: res } = await this.$http.post(
+        `userInfo/${this.userId}`,
+        this.userInfo
+      )
+      if (res.status !== 200) {
+        return this.$message({ message: res.msg, type: 'error', offset: 80 })
+      }
+      this.$message({ message: res.msg, type: 'success', offset: 80 })
     },
     getBase64(file) {
       return new Promise(function(resolve, reject) {
@@ -204,9 +215,10 @@ export default {
 .el-container {
   height: 100%;
   width: 100%;
+  position: relative;
 }
 .uploadAvatar {
-  position: absolute;
+  position: relative;
   height: 300px;
   width: 300px;
   border: 1px solid #eee;
@@ -216,7 +228,6 @@ export default {
   box-shadow: 0 0 10px #ddd;
   -webkit-animation: fade-in 1s;
 }
-
 @keyframes fade-in {
   0% {
     opacity: 0;
@@ -228,7 +239,6 @@ export default {
     opacity: 1;
   }
 }
-
 .el-avatar {
   margin: 0 auto;
   cursor: pointer;
@@ -237,22 +247,19 @@ export default {
   left: 50%;
   transform: translate(-50%, -65%);
 }
-
 .uploadbtn {
   margin-top: 220px;
   position: absolute;
   left: 50%;
   transform: translate(-50%, 0);
 }
-
 .el-avatar > img {
   position: absolute;
   left: 50%;
   transform: translate(-50%, 0);
 }
-
 .infoBox {
-  position: absolute;
+  position: relative;
   height: 750px;
   width: 850px;
   border: 1px solid #eee;
@@ -261,7 +268,7 @@ export default {
   background-color: #fff;
   box-shadow: 0 0 10px #ddd;
   -webkit-animation: fade-in 1s;
-  margin-left: 350px;
+  margin-left: 50px;
   box-sizing: border-box;
   padding-top: 40px;
   padding-right: 40px;
@@ -272,7 +279,6 @@ export default {
     font-size: 30px;
   }
 }
-
 .el-form {
   width: 100%;
   .el-button {

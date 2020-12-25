@@ -31,9 +31,7 @@ export default {
         password: '123456'
       },
       loginFormRules: {
-        email: [
-          { required: true, message: '请输入邮箱', trigger: 'blur' }
-        ],
+        email: [{ required: true, message: '请输入邮箱', trigger: 'blur' }],
         password: [
           { min: 6, max: 15, message: '密码应在6-15位之间', trigger: 'blur' },
           { required: true, message: '密码不能为空', trigger: 'blur' }
@@ -41,12 +39,17 @@ export default {
       }
     }
   },
+  created() {
+    this.$store.state.showLoginbtn = false
+  },
   methods: {
     login() {
       this.$refs.loginFormRef.validate(async valid => {
         if (!valid) return
         const { data: res } = await this.$http.post('login', this.loginForm)
-        if (res.status !== 200) return this.$message.error(res.msg)
+        if (res.status !== 200) {
+          return this.$message({ message: res.msg, type: 'error', offset: 70 })
+        }
         this.$message.success(res.msg)
         // 存储token值
         window.sessionStorage.setItem('token', res.token)
@@ -54,10 +57,14 @@ export default {
         this.$store.state.showUser = true
         // 存储用户的用户名并显示在页面上
         window.sessionStorage.setItem('username', res.username)
-        this.$store.state.userInfo.username = window.sessionStorage.getItem('username')
+        this.$store.state.userInfo.username = window.sessionStorage.getItem(
+          'username'
+        )
         // 存储用户的头像图片并显示在页面上
         window.sessionStorage.setItem('avatar', res.avatar)
-        this.$store.state.userInfo.avatar = window.sessionStorage.getItem('avatar')
+        this.$store.state.userInfo.avatar = window.sessionStorage.getItem(
+          'avatar'
+        )
         // 存储用户的Id
         window.sessionStorage.setItem('userId', res.userId)
         this.$router.push('/home')

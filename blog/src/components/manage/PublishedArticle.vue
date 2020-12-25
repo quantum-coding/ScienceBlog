@@ -1,18 +1,26 @@
 <template>
-  <div class="container">
-    <div
-      class="showArticle"
-      v-for="item in this.articleList"
-      :key="item.id"
-      @click="articleDetail(item._id)"
-    >
-      <h1>{{ item.title }}</h1>
-      <span>{{ item.author }} | {{ item.publishDate }}</span>
-      <img :src="item.coverImg" alt="" />
-      <div
-        class="content"
-        v-html="$options.filters.ellipsis(item.content)"
-      ></div>
+  <div
+    class="container"
+    v-infinite-scroll="debounce"
+    infinite-scroll-disabled="false"
+    :infinite-scroll-distance="distance"
+  >
+    <ul>
+      <li
+        class="showArticle"
+        v-for="item in this.articleList"
+        :key="item.id"
+        @click="articleDetail(item._id)"
+      >
+        <h1>{{ item.title }}</h1>
+        <span>{{ item.publishDate }}</span>
+      </li>
+    </ul>
+    <div v-if="loading" class="show">
+      <div class="loading"><img src="../../assets/loading.gif" />加载中...</div>
+    </div>
+    <div v-if="noMore" class="show">
+      <div class="noMore">没有更多了</div>
     </div>
   </div>
 </template>
@@ -30,16 +38,70 @@ export default {
   },
   data() {
     return {
-      articleList: []
+      articleList: [],
+      loading: false,
+      noMore: false,
+      // 当前的页码
+      currentPage: 1,
+      totalPages: 1,
+      authorId: '',
+      timer: '',
+      distance: 0
     }
   },
   created() {
     this.getArticles()
   },
+  watch: {
+    articleList: function() {
+      let that = this
+      that.$nextTick(function() {
+        that.timer = '1'
+      })
+    }
+  },
   methods: {
+    debounce() {
+      if (this.timer) {
+        clearTimeout(this.timer)
+        return (this.timer = setTimeout(() => {
+          this.load()
+        }, 2000))
+      }
+    },
+    load() {
+      console.log(1)
+      this.loading = true
+      if (this.currentPage < this.totalPages) {
+        setTimeout(async () => {
+          this.currentPage += 1
+          await this.$http
+            .post(`/article/${this.authorId}`, {
+              currentPage: this.currentPage
+            })
+            .then(res => {
+              this.articleList = this.articleList.concat(res.data.records)
+              console.log(this.articleList)
+            })
+        }, 500)
+      } else {
+        this.loading = false
+        this.noMore = true
+        this.timer = ''
+      }
+    },
     async getArticles() {
-      const { data } = await this.$http.get('/article')
-      this.articleList = data
+      // 获取用户Id
+      this.authorId = window.sessionStorage.getItem('userId')
+      const { data } = await this.$http.post(`/article/${this.authorId}`, {
+        currentPage: this.currentPage
+      })
+      console.log(data)
+      this.articleList = data.records
+      if (data.size >= 3) {
+        this.loading = true
+      }
+      this.totalPages = data.pages
       console.log(this.articleList)
     },
     articleDetail(id) {
@@ -51,69 +113,62 @@ export default {
 
 <style lang="less" scoped>
 .container {
-  width: 700px;
+  position: relative;
+  height: 600px;
+  width: 720px;
+  overflow: auto;
+}
+
+ul {
+  width: 100%;
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  li {
+    margin-left: 0;
+  }
 }
 .showArticle {
   position: relative;
-  height: 200px;
+  height: 150px;
   width: 700px;
-  overflow: hidden;
-  margin-left: 10px;
   border: 1px solid #eee;
-  border-radius: 2%;
   padding: 0;
   background-color: #fff;
-  box-shadow: 0 0 10px #ddd;
-  -webkit-animation: fade-in 1s;
   cursor: pointer;
-  margin: 10px 0;
 
   h1 {
     position: relative;
     display: block;
-    font-size: 30px;
+    font-size: 25px;
     margin-left: 20px;
     margin-bottom: 20px;
   }
 
   span {
-    margin-left: 20px;
-  }
-
-  img {
-    z-index: 999;
     position: absolute;
-    float: right;
-    margin-top: -40px;
-    margin-left: 350px;
-    background-color: #000;
-    width: 150px;
-    height: 100px;
-    border-radius: 10px;
-    border: 0;
-  }
-
-  .content {
-    width: 450px;
-    height: 30px;
-    margin-top: 30px;
-    margin-left: 20px;
-    text-overflow: ellipsis;
+    margin: 20px 20px;
   }
 }
 
 .showArticle:hover {
   background-color: rgba(0, 0, 0, 0.2);
 }
-@keyframes fade-in {
-  0% {
-    opacity: 0;
-  }
-  50% {
-    opacity: 0.5;
-  }
-  100% {
-    opacity: 1;
-  }
+
+.show {
+  background-color: #fbfbfb;
+}
+
+.loading, .noMore {
+  width: 100px;
+  display: flex;
+  align-items: center;
+  height: 50px;
+  margin: 0 auto;
+}
+
+.loading > img {
+  width: 40px;
+  height: 40px;
 }
 </style>

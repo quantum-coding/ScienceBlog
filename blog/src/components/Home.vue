@@ -2,7 +2,7 @@
   <el-container>
     <el-header>
       <div>
-        <span>ScienceTalk</span>
+        <span style="cursor: pointer" @click="backToIndex">ScienceTalk</span>
       </div>
       <div class="user">
         <span
@@ -39,7 +39,13 @@
       <div class="content">
         <router-view></router-view>
       </div>
-      <el-footer></el-footer>
+      <el-footer>
+        <div class="right">
+          <p>rights@ SeceinceTalk Company deserve</p>
+          <p>盗版违法,违法必究</p>
+          <p>国审xxxxxxxx号</p>
+        </div>
+      </el-footer>
     </el-main>
   </el-container>
 </template>
@@ -68,6 +74,9 @@ export default {
     this.$store.state.userInfo.avatar = window.sessionStorage.getItem('avatar')
   },
   methods: {
+    backToIndex() {
+      this.$router.push('/index')
+    },
     login() {
       // 隐藏登陆显示按钮
       this.$store.state.showLoginbtn = false
@@ -131,7 +140,6 @@ export default {
   }
   .el-avatar {
     position: relative;
-    overflow: hidden;
   }
   .el-avatar > img {
     position: relative;
@@ -142,6 +150,7 @@ export default {
     font-size: 15px;
     font-weight: 500;
     font-family: 'Microsoft Yahei';
+    cursor: pointer;
   }
 }
 .el-main {
@@ -157,11 +166,21 @@ export default {
   padding-left: 20px;
   padding-right: 20px;
 }
-
 .el-footer {
+  overflow: hidden;
   width: 100%;
-  margin-top: 300px;
+  height: 150px !important;
+  margin-top: 100px;
+  line-height: 15px;
   position: relative;
   background-color: #282b2d;
+  .right {
+    position: relative;
+    width: 305px;
+    display: block;
+    color: #ccc;
+    margin: 40px auto;
+    text-align: center;
+  }
 }
 </style>

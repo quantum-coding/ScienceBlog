@@ -13,7 +13,7 @@
         </el-input>
       </div>
       <div class="button_box">
-        <el-button type="primary" plain>保存草稿</el-button>
+        <el-button type="primary" plain @click="keepDraft">保存草稿</el-button>
         <el-button type="primary" @click="showDialogForm">发布文章</el-button>
       </div>
     </el-header>
@@ -25,7 +25,13 @@
         ref="md"
       />
     </el-main>
-    <el-footer></el-footer>
+    <el-dialog title="文章发布" :visible.sync="tipsVisible">
+      您的文章是否要保存为草稿？
+      <div slot="footer" class="dialog-footer">
+        <el-button @click="cancelDraft">取 消</el-button>
+        <el-button type="primary" @click="keepAndBack">确 定</el-button>
+      </div>
+    </el-dialog>
     <el-dialog title="文章发布" :visible.sync="dialogFormVisible">
       <el-form>
         <el-form-item label="添加标签:" label-width="100px">
@@ -128,7 +134,18 @@ export default {
       value: '',
       disabled: false,
       // 输入框的日期
-      date: ''
+      date: '',
+      draft: {
+        title: '',
+        content: '',
+        uid: ''
+      },
+      // 判断该文章是新写的还是之前的草稿
+      isDraft: false,
+      // 判断草稿是否保存
+      iskept: false,
+      tipsVisible: false,
+      draftId: ''
     }
   },
   created() {
@@ -137,8 +154,70 @@ export default {
     const mm = (myDate.getMonth() + 1 + '').padStart(2, '0')
     const dd = (myDate.getDate() + '').padStart(2, '0')
     this.date = `${yy}-${mm}-${dd}`
+
+    this.getDraft()
+  },
+  // beforeRouteEnter在调用的时候，组件实例尚未被创建出来，要在next中获取组件实例
+  beforeRouteEnter(to, from, next) {
+    next(vm => {
+      // 获取草稿细节
+      if (from.path == '/draftBox') {
+        vm.getDraft()
+        vm.isDraft = true
+      }
+    })
   },
   methods: {
+    keepAndBack() {
+      this.keepDraft()
+      this.$router.push('/newArticle')
+    },
+    async getDraft() {
+      const id = this.$route.params.id
+      const { data: res } = await this.$http.get(`/draft/draftDetail/${id}`)
+      console.log(res)
+      this.publishArticle.title = res.title
+      this.content = res.content
+      // 设置草稿Id
+      window.sessionStorage.setItem('draftId', res._id)
+
+      this.draftId = window.sessionStorage.getItem('draftId')
+    },
+    async keepDraft() {
+      // 保存草稿或如果标题为空，那么就用日期代替
+      if (this.publishArticle.title == '') {
+        this.publishArticle.title = this.date
+      }
+      this.draft.title = this.publishArticle.title
+      this.draft.content = this.content
+      this.draft.uid = window.sessionStorage.getItem('userId')
+
+      // 获取草稿的Id
+      this.draftId = window.sessionStorage.getItem('draftId')
+
+      this.iskept = true
+
+      this.isDraft = true
+
+      if (this.img_file.length !== 0) {
+        await this.uploadImg().then(res => {
+          this.draft.content = res
+        })
+      }
+
+      const { data } = await this.$http.post(
+        `/draft/${this.draftId}`,
+        this.draft
+      )
+
+      this.$message.success('已保存至草稿箱')
+
+      this.$router.push(`/draftDetail/${data._id}`)
+
+      window.sessionStorage.setItem('draftId', data._id)
+
+      // 确定草稿已经保存
+    },
     handleClose(tag) {
       this.dynamicTags.splice(this.dynamicTags.indexOf(tag), 1)
       // 如果标签少于3个则可以添加标签
@@ -170,6 +249,15 @@ export default {
     },
 
     back() {
+      if (this.iskept === false) {
+        this.tipsVisible = true
+      } else {
+        this.$router.push('/newArticle')
+        window.sessionStorage.removeItem('draftId')
+      }
+    },
+
+    cancelDraft() {
       this.$router.push('/newArticle')
     },
     async showDialogForm() {
@@ -177,11 +265,21 @@ export default {
       if (this.publishArticle.title === '' || this.content === '') {
         return this.$message.error('标题或文章内容不能为空')
       }
-      await this.uploadImg()
+      // if (this.img_file.length !== 0) {
+      //   await this.uploadImg().then(res => {
+      //     this.draft.content = res
+      //   })
+      // }
       this.dialogFormVisible = true
     },
     async publish() {
-      // 将内容转换为html格式,并获取
+      if (this.img_file.length !== 0) {
+        await this.uploadImg().then(res => {
+          // 将内容转换为html格式,并获取
+          this.publishArticle.content = marked(this.content)
+        })
+      }
+
       this.publishArticle.content = marked(this.content)
       // 获取发表日期
       this.publishArticle.publishdate = this.date
@@ -190,7 +288,7 @@ export default {
       // 获取文章标签
       this.publishArticle.tags = this.dynamicTags
       // 获取用户名
-      this.publishArticle.author = window.sessionStorage.getItem('username')
+      this.publishArticle.author = window.sessionStorage.getItem('userId')
 
       var file = document.querySelector('#file')
 
@@ -199,9 +297,19 @@ export default {
         this.publishArticle.coverImg = result
       })
 
-      const data = await this.$http.post('/article', this.publishArticle)
+      const { data } = await this.$http.post('/article', this.publishArticle)
 
-      // console.log(data)
+      this.dialogFormVisible = false
+
+      this.iskept = true
+
+      // 如果该文章是之前写的草稿进行发布就删除草稿
+      if (this.isDraft) {
+        await this.$http.put(`/draft/${this.draftId}`)
+        window.sessionStorage.removeItem('draftId')
+      }
+
+      this.$router.push(`/articleDetail/${data._id}`)
     },
 
     getBase64(file) {
@@ -224,12 +332,13 @@ export default {
     imgAdd(index, file) {
       // 缓存图片信息,markdown的图片索引是从1开始的，因此数组的索引要减1
       this.img_file[index - 1] = file
+      console.log(this.img_file)
     },
     imgDel(index) {
       this.img_file.pop(this.img_file[index - 1])
     },
 
-    uploadImg(e) {
+    async uploadImg(e) {
       var formdata = new FormData()
       for (var _img in this.img_file) {
         formdata.append('file', this.img_file[_img])
@@ -238,7 +347,7 @@ export default {
       // 将图片中的索引替换为资源路径从而实现图片资源外链访问
       //  this.$refs.md.$img2Url(index, url)
 
-      axios({
+      await axios({
         url: '/article/upload_img',
         method: 'post',
         data: formdata,
@@ -252,13 +361,14 @@ export default {
         // 第二步.将返回的url替换到文本原位置![...](0) -> ![...](url)
         const { data: urls } = res
 
-        console.log(urls)
+        // console.log(urls)
 
         for (var url in urls) {
           this.$refs.md.$img2Url(url, urls[url])
           // this.$refs.md.$imgUpdateByUrl(url, urls[url])
         }
       })
+      return this.content
     }
   }
 }
