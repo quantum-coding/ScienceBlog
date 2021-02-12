@@ -249,6 +249,8 @@ export default {
 
       this.commentMsg.authorId = this.article.author._id
 
+      this.comContent = ''
+
       this.getArticleDetail(this.$route.params.id)
 
       await this.$http.post('/message/commentMsg', this.commentMsg)

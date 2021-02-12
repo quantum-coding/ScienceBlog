@@ -54,7 +54,7 @@ export default {
   },
   watch: {
     articleList: function() {
-      let that = this
+      const that = this
       that.$nextTick(function() {
         that.timer = '1'
       })
@@ -70,7 +70,6 @@ export default {
       }
     },
     load() {
-      console.log(1)
       this.loading = true
       if (this.currentPage < this.totalPages) {
         setTimeout(async () => {
@@ -102,7 +101,10 @@ export default {
         this.loading = true
       }
       this.totalPages = data.pages
-      console.log(this.articleList)
+      if (this.articleList.length == 0 || this.articleList.length < 3) {
+        this.loading = false
+        this.noMore = true
+      }
     },
     articleDetail(id) {
       this.$router.push('/articleDetail/' + id)
@@ -157,9 +159,12 @@ ul {
 
 .show {
   background-color: #fbfbfb;
+  box-sizing: border-box;
+  width: 700px;
 }
 
-.loading, .noMore {
+.loading,
+.noMore {
   width: 100px;
   display: flex;
   align-items: center;

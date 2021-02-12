@@ -6,6 +6,10 @@ const app = express();
 
 const bodyParser = require("body-parser");
 
+var path = require("path");
+
+app.use(express.static(path.join(__dirname, "dist")))
+
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
@@ -108,6 +112,6 @@ const messageRouter = require("./routes/message");
 app.use("/routes/message", messageRouter);
 
 app.listen(8888, () => {
-    console.log("sever running at http://127.0.0.1");
+    console.log("sever running at http://localhost");
 });
 console.log("网站服务器启动成功");

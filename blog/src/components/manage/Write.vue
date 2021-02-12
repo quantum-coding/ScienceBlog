@@ -195,6 +195,8 @@ export default {
       // 获取草稿的Id
       this.draftId = window.sessionStorage.getItem('draftId')
 
+      console.log(this.draftId)
+
       this.iskept = true
 
       this.isDraft = true
@@ -299,17 +301,19 @@ export default {
 
       const { data } = await this.$http.post('/article', this.publishArticle)
 
+      console.log(data)
+
       this.dialogFormVisible = false
 
       this.iskept = true
 
+      this.$router.push(`/articleDetail/${data._id}`)
+
       // 如果该文章是之前写的草稿进行发布就删除草稿
       if (this.isDraft) {
         await this.$http.put(`/draft/${this.draftId}`)
-        window.sessionStorage.removeItem('draftId')
+        window.sessionStorage.setItem('draftId', '')
       }
-
-      this.$router.push(`/articleDetail/${data._id}`)
     },
 
     getBase64(file) {

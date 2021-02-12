@@ -24,7 +24,7 @@ router.post("/:id", async(req, res) => {
     const id = req.params.id;
     const { title, content, uid } = req.body;
 
-    if (id === "null") {
+    if (id === 'undefined' || id === 'null') {
         let newDraft = await Draft.create({
             title: title,
             content: content,
@@ -67,7 +67,8 @@ router.put("/:id", async(req, res) => {
     // 获取用户的id
     const id = req.params.id;
     // 查找草稿的Id并删除草稿
-    await Draft.deleteOne({ _id: id });
+    await Draft.remove({ _id: id });
+    res.send('草稿删除成功')
 });
 
 module.exports = router;
