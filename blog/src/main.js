@@ -30,7 +30,7 @@ Vue.filter('dateFormat', function(originVal) {
 
 Vue.config.productionTip = false
 
-axios.defaults.baseURL = 'http://localhost:8888/routes'
+axios.defaults.baseURL = 'http://47.115.132.14:8888/routes'
 
 axios.interceptors.request.use(config => {
     config.headers.Authorization = window.sessionStorage.getItem('token')

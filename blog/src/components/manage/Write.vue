@@ -365,7 +365,7 @@ export default {
         // 第二步.将返回的url替换到文本原位置![...](0) -> ![...](url)
         const { data: urls } = res
 
-        // console.log(urls)
+        console.log(urls)
 
         for (var url in urls) {
           this.$refs.md.$img2Url(url, urls[url])

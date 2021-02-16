@@ -27,7 +27,7 @@ export default {
   data() {
     return {
       loginForm: {
-        email: '1746128609@qq.com',
+        email: '1746128606@qq.com',
         password: '123456'
       },
       loginFormRules: {

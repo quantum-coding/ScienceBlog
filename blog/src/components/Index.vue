@@ -18,6 +18,7 @@
       <el-pagination
         background
         layout="prev, pager, next"
+        :pager-count="5"
         :page-count="pageCount"
         @current-change="change"
         :current-page.sync="currentPage"
@@ -167,16 +168,25 @@ export default {
 
 <style lang="less" scoped>
 .el-container {
+  display: flex;
+  flex-direction: column;
   position: relative;
 }
 .container {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 60%;
   position: relative;
-  margin-left: 100px;
+}
+.slide {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 40%;
 }
 .showArticle {
   position: relative;
   height: 200px;
-  width: 700px;
+  width: 100%;
   overflow: hidden;
   margin-left: 10px;
   border: 1px solid #eee;
@@ -208,11 +218,10 @@ export default {
   }
 
   img {
-    z-index: 999;
+    display: none;
     position: absolute;
-    float: right;
-    margin-top: -40px;
-    margin-left: 520px;
+    top: 50px;
+    right: 20px;
     background-color: #000;
     width: 150px;
     height: 100px;
@@ -236,18 +245,18 @@ export default {
 
 .el-pagination {
   margin-top: 50px;
+  margin-left: 0;
 }
 
 .search {
-  width: 350px;
-  margin-left: 50px;
+  width: 100%;
 }
 
 .searchResult {
   z-index: 10;
   position: absolute;
   margin-top: 5px;
-  width: 350px;
+  width: 100%;
   background-color: #fff;
   border: 1px solid #eee;
   border-radius: 2%;
@@ -274,8 +283,8 @@ export default {
 
 .hot {
   position: relative;
-  margin-left: 50px;
   margin-top: 300px;
+  margin-left: 0;
   ul {
     list-style-type: none;
     padding-left: 0;
@@ -288,7 +297,7 @@ export default {
     box-sizing: border-box;
     border-bottom: 1px solid #ccc;
     h1 {
-      width: 193px;
+      width: 180px;
       display: block;
       margin-left: 150px;
       position: absolute;
@@ -320,6 +329,24 @@ export default {
   }
   100% {
     opacity: 1;
+  }
+}
+
+@media (min-width: 900px) {
+  .el-container {
+    flex-direction: row;
+  }
+  .slide {
+    margin-left: 50px;
+  }
+  .hot {
+    margin-top: 300px;
+  }
+}
+
+@media (min-width: 500px) {
+  .showArticle > img {
+    display: block;
   }
 }
 </style>

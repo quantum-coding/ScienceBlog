@@ -37,6 +37,7 @@ router.post("/", async(req, res) => {
 
 // 用户上传图片的路由
 router.post("/upload_img", uploadFile, async(req, res) => {
+    console.log(1)
     var urls = ["null"];
     for (var i in req.files) {
         var fileExtArray = req.files[i].originalname.split("."); // 将文件的名称用点分隔开
@@ -53,9 +54,10 @@ router.post("/upload_img", uploadFile, async(req, res) => {
         );
         // 要将目标文件夹的反斜杠替换为正斜杠，否则是无法外链访问的
         var targetPatharray = targetPath.split("\\");
-        targetPath = targetPatharray[0] + "/" + targetPatharray[1];
+        targetPath = targetPatharray[0]
+        console.log(targetPath)
         targetPatharray.length = 0;
-        urls.push(upload_config.get("baseURL") + "/" + targetPath);
+        urls.push("http://47.115.132.14:8888/" + targetPath);
         if (urls.length === req.files.length + 1) {
             req.body = urls;
             res.send(req.body);

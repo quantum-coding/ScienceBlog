@@ -112,6 +112,6 @@ const messageRouter = require("./routes/message");
 app.use("/routes/message", messageRouter);
 
 app.listen(8888, () => {
-    console.log("sever running at http://localhost");
+    console.log("sever running at http://47.115.132.14");
 });
 console.log("网站服务器启动成功");

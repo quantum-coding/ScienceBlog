@@ -57,7 +57,7 @@ router.beforeEach((to, from, next) => {
         // 如果要去的是登陆页直接放行
     if (to.path === '/login' || to.path === '/home' || to.path === '/register' || to.path === '/index') {
         // 在跳入首页时判断用户的登陆状态， 如果没有就显示登陆按钮， 隐藏用户信息
-        if (to.path === '/home') {
+        if (to.path === '/index') {
             if (!tokenStr) {
                 store.state.showLoginbtn = true
                 store.state.showUser = false

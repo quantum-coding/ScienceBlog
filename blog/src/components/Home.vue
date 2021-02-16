@@ -2,7 +2,7 @@
   <el-container>
     <el-header>
       <div>
-        <span style="cursor: pointer" @click="backToIndex">ScienceTalk</span>
+        <span style="cursor: pointer" @click="backToIndex" class="logo" >ScienceTalk</span>
       </div>
       <div class="user">
         <span
@@ -124,7 +124,6 @@ export default {
     width: 50px;
   }
   span {
-    font-size: 30px;
     font-weight: 700;
     font-family: 'Courier New', Courier, monospace;
     color: #ffffff;
@@ -134,8 +133,11 @@ export default {
     display: flex;
     align-items: center;
   }
+  .logo {
+    font-size: 1.5rem;
+  }
   .login {
-    font-size: 20px;
+    font-size: 1.5rem;
     cursor: pointer;
   }
   .el-avatar {
