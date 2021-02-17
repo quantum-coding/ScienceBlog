@@ -74,14 +74,16 @@ export default {
 
 <style lang="less" scoped>
 .register_container {
+  display: flex;
+  flex-direction: row;
   height: 500px;
   position: relative;
 }
 
 .register_box {
-  width: 500px;
+  width: 30rem;
   height: 300px;
-  position: absolute;
+  position: relative;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
@@ -104,7 +106,7 @@ export default {
 }
 
 .el-button {
-  width: 310px;
+  width: 100%;
 }
 
 @keyframes fade-in {

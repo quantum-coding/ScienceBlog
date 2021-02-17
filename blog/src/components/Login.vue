@@ -79,14 +79,17 @@ export default {
 
 <style lang="less" scoped>
 .login_container {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
   height: 400px;
   position: relative;
 }
 
 .login_box {
-  width: 450px;
+  width: 30rem;
   height: 300px;
-  position: absolute;
+  position: relative;
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
@@ -122,4 +125,5 @@ export default {
     opacity: 1;
   }
 }
+
 </style>
