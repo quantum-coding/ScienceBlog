@@ -19,12 +19,12 @@
             }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="文章标题" width="300" style="margin-left: 20px">
+        <el-table-column label="文章标题" width="200">
           <template slot-scope="scope">
             <span>{{ scope.row.title }}</span>
           </template>
         </el-table-column>
-        <el-table-column label="操作">
+        <el-table-column label="操作" width="200">
           <template slot-scope="scope">
             <el-button size="mini" @click="handleEdit(scope.$index, scope.row)"
               >编辑</el-button
@@ -105,7 +105,6 @@ export default {
 
 <style lang="less" scoped>
 .container {
-  width: 800px;
   height: 400px;
 }
 
@@ -114,6 +113,8 @@ export default {
 }
 
 .el-pagination {
-  margin: 20px 10px 10px 300px;
+  display: block;
+  width: 100px;
+  margin: 30px auto;
 }
 </style>

@@ -23,6 +23,7 @@
         @imgAdd="imgAdd"
         @imgDel="imgDel"
         ref="md"
+        style="height: 100%; position: relative"
       />
     </el-main>
     <el-dialog title="文章发布" :visible.sync="tipsVisible">
@@ -157,6 +158,7 @@ export default {
 
     this.getDraft()
   },
+
   // beforeRouteEnter在调用的时候，组件实例尚未被创建出来，要在next中获取组件实例
   beforeRouteEnter(to, from, next) {
     next(vm => {
@@ -388,13 +390,14 @@ export default {
   height: 60px !important;
   line-height: 60px;
   display: flex;
+  flex-wrap: wrap;
   padding: 0 20px;
   background-color: #4e6ef2;
   align-items: center;
   justify-content: space-between;
 }
 .arrow-left {
-  display: block;
+  display: flex;
   border-left: 3px solid #eee;
   border-top: 3px solid #eee;
   transform: rotate(-45deg);
@@ -403,12 +406,25 @@ export default {
   margin-left: 5px;
   cursor: pointer;
 }
+.el-main {
+  margin-top: 50px;
+}
+.title_bar {
+  display: flex;
+  flex: 70%;
+}
 .title {
-  width: 900px;
+  width: 100%;
 }
 .button_box {
+  display: flex;
+  flex: 1;
+  position: relative;
+  margin-left: 1rem;
+  margin-top: 1rem;
   .el-button {
-    float: left;
+    display: flex;
+    flex: 1;
   }
 }
 .el-form {
@@ -429,5 +445,14 @@ export default {
   width: 90px;
   margin-left: 10px;
   vertical-align: bottom;
+}
+
+@media screen and (min-width: 875px) {
+  .el-main {
+    margin-top: 0;
+  }
+  .button_box {
+    margin-top: 0;
+  }
 }
 </style>

@@ -21,10 +21,11 @@
       <p>个人信息</p>
       <el-form
         status-icon
-        label-width="100px"
+        label-width="80px"
         :model="userInfo"
         :disabled="disabled"
         :rules="infoFormRules"
+        style="padding-right: 5px;"
       >
         <el-form-item label="邮箱" prop="email">
           <el-input v-model="userInfo.email"></el-input>
@@ -33,7 +34,7 @@
           <el-input v-model="userInfo.username"></el-input>
         </el-form-item>
         <el-form-item label="出生日期" prop="borndate">
-          <el-col :span="11">
+          <el-col :span="20">
             <el-date-picker
               type="date"
               placeholder="选择日期"
@@ -66,14 +67,14 @@
           ></el-input>
         </el-form-item>
       </el-form>
-      <el-form style="margin-left: 100px">
+      <el-form class="btns" style="margin: 0 auto">
         <el-form-item>
           <el-button type="primary" @click="change">修改</el-button>
           <el-button @click="save">保存并提交</el-button>
         </el-form-item>
       </el-form>
     </div>
-    <el-dialog title="提示" :visible.sync="dialogVisible" width="30%">
+    <el-dialog title="提示" :visible.sync="dialogVisible" width="60%">
       <span>是否确定修改？</span>
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogVisible = false">取 消</el-button>
@@ -213,14 +214,17 @@ export default {
 
 <style lang="less" scoped>
 .el-container {
+  display: flex;
+  flex-direction: column;
   height: 100%;
   width: 100%;
   position: relative;
 }
 .uploadAvatar {
+  display: flex;
+  flex: 1;
   position: relative;
   height: 300px;
-  width: 300px;
   border: 1px solid #eee;
   border-radius: 5%;
   padding: 0;
@@ -259,30 +263,47 @@ export default {
   transform: translate(-50%, 0);
 }
 .infoBox {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
   position: relative;
   height: 750px;
-  width: 850px;
   border: 1px solid #eee;
-  border-radius: 5%;
-  padding: 0;
+  border-radius: 2%;
+  padding: 0 !important;
   background-color: #fff;
   box-shadow: 0 0 10px #ddd;
+  margin-top: 50px;
   -webkit-animation: fade-in 1s;
-  margin-left: 50px;
   box-sizing: border-box;
   padding-top: 40px;
   padding-right: 40px;
   p {
-    display: inline-block;
-    margin-top: 0;
+    margin-top: 20px;
     margin-left: 20px;
     font-size: 30px;
   }
 }
 .el-form {
   width: 100%;
-  .el-button {
-    margin-left: 10px;
+  box-sizing: border-box;
+}
+.btns {
+  display: flex;
+  justify-content: center;
+}
+
+@media (min-width: 500px) {
+  .el-container {
+    flex-direction: row;
+  }
+  .uploadAvatar {
+    flex: 40%;
+  }
+  .infoBox {
+    flex: 60%;
+    margin-top: 0;
+    margin-left: 50px;
   }
 }
 </style>

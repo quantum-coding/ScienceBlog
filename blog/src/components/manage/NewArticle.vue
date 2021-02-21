@@ -22,8 +22,7 @@ export default {
 .show_box {
   position: absolute;
   height: 800px;
-  width: 940px;
-  margin-left: 10px;
+  width: 100%;
   border: 1px solid #eee;
   border-radius: 2%;
   padding: 0;

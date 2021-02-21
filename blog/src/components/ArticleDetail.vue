@@ -54,7 +54,6 @@
           </el-input>
         </div>
         <el-button type="primary" @click="publishComment">评论</el-button>
-        <div style="clear: both"></div>
       </div>
       <div class="showCommit">
         <ul>
@@ -377,7 +376,7 @@ export default {
 .articleContainer {
   position: relative;
   padding-top: 0;
-  width: 760px;
+  width: 100%;
   line-height: 30px;
   margin: 0 auto;
   .article {
@@ -399,13 +398,13 @@ export default {
   width: 100%;
   background-color: #f8f8f8;
   border-radius: 4px;
-  height: 65px;
+  padding-bottom: 10px;
 }
 
 .author {
+  display: block;
   margin-left: 50px;
 }
-
 .publishDate {
   margin-left: 50px;
   color: #999aaa;
@@ -440,11 +439,12 @@ export default {
 
 .fixtool_box {
   position: fixed;
-  width: 760px;
   bottom: 0;
+  box-sizing: border-box;
 }
 
 ul {
+  width: 100%;
   height: 100%;
   display: flex;
   align-items: center;
@@ -473,8 +473,10 @@ i {
 }
 
 .commit_box {
+  display: flex;
+  flex-direction: column;
   position: relative;
-  width: 760px;
+  width: 100%;
   border: 1px solid #eee;
   background-color: #ffffff;
   box-shadow: 0 0 10px #ddd;
@@ -483,11 +485,13 @@ i {
 }
 
 .write_commit {
+  display: flex;
+  flex-direction: row;
   position: relative;
   width: 100%;
   margin-top: 10px;
   padding-left: 20px;
-  clear: both;
+  box-sizing: border-box;
   .el-avatar > img {
     position: relative;
     left: 50%;
@@ -496,18 +500,19 @@ i {
 }
 
 .el-avatar {
-  float: left;
   margin-right: 10px;
 }
 .wirteCommit {
-  width: 600px;
-  float: left;
+  display: flex;
+  flex: 95%;
   margin-bottom: 10px;
   margin-right: 5px;
 }
 
 .el-button {
-  float: left;
+  display: flex;
+  flex: 5%;
+  height: 40px;
 }
 
 .showCommit {
@@ -561,6 +566,15 @@ p {
   width: 60px;
   i {
     font-size: 18px;
+  }
+}
+
+@media (min-width: 760px) {
+  .articleContainer {
+    width: 760px;
+  }
+  .fixtool_box {
+    width: 760px;
   }
 }
 </style>

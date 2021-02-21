@@ -6,6 +6,7 @@
         :unique-opened="true"
         router
         :default-active="activePath"
+        :mode="mode"
       >
         <el-submenu :index="item.id" v-for="item in menulist" :key="item.id">
           <template slot="title">
@@ -20,10 +21,10 @@
             @click="savNavPath('/' + subItem.path)"
           >
             <template slot="title">
-                <!-- 图标 -->
-                <i class="el-icon-menu"></i>
-                <!-- 文本 -->
-                <span>{{ subItem.title }}</span>
+              <!-- 图标 -->
+              <i class="el-icon-menu"></i>
+              <!-- 文本 -->
+              <span>{{ subItem.title }}</span>
             </template>
           </el-menu-item>
         </el-submenu>
@@ -36,9 +37,12 @@
 </template>
 
 <script>
+import $ from 'jquery'
 export default {
   data() {
     return {
+      mode: 'vertical',
+      screenWidth: document.body.clientWidth,
       /* 菜单的选项
       此处的menulist也可以存储在后台数据库中，可自行修改 */
       menulist: [
@@ -70,6 +74,18 @@ export default {
   created() {
     this.activePath = window.sessionStorage.getItem('activePath')
   },
+  mounted() {
+    const that = this
+    window.addEventListener('resize', function() {
+      if (document.body.clientWidth >= 500) {
+        that.mode = 'vertical'
+        $('.manage_box').width(200)
+      } else {
+        that.mode = 'horizontal'
+        $('.manage_box').width('100%')
+      }
+    })
+  },
   methods: {
     savNavPath(activePath, index) {
       window.sessionStorage.setItem('activePath', activePath)
@@ -82,17 +98,16 @@ export default {
 
 <style lang="less" scoped>
 .container {
+  position: relative;
   width: 100%;
   height: 100%;
 }
 
 .manage_box {
-  position: absolute;
-  height: 300px;
-  width: 200px;
-  margin-left: 10px;
+  position: relative;
+  margin-left: 0;
   border: 1px solid #eee;
-  border-radius: 5%;
+  border-radius: 1%;
   padding: 0;
   background-color: #fff;
   box-shadow: 0 0 10px #ddd;
@@ -112,9 +127,22 @@ export default {
 }
 
 .showbox {
-  width: 940px;
+  position: relative;
+  margin-top: 50px;
   height: 800px;
-  margin-left: 250px;
 }
 
+@media (min-width: 500px) {
+  .container {
+    display: flex;
+    flex-direction: row;
+  }
+
+  .showbox {
+    margin-top: 0;
+    margin-left: 50px;
+    width: 100%;
+  }
+
+}
 </style>

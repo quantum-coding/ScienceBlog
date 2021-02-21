@@ -115,9 +115,11 @@ export default {
 
 <style lang="less" scoped>
 .container {
+  display: flex;
+  flex-direction: column;
   position: relative;
   height: 600px;
-  width: 720px;
+  width: 100%;
   overflow: auto;
 }
 
@@ -133,7 +135,7 @@ ul {
 .showArticle {
   position: relative;
   height: 150px;
-  width: 700px;
+  width: 100%;
   border: 1px solid #eee;
   padding: 0;
   background-color: #fff;
@@ -160,7 +162,7 @@ ul {
 .show {
   background-color: #fbfbfb;
   box-sizing: border-box;
-  width: 700px;
+  width: 100%;
 }
 
 .loading,

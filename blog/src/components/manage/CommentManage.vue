@@ -66,7 +66,7 @@ export default {
 
 <style lang="less" scoped>
 .el-card {
-  width: 800px;
+  width: 100%;
   height: 700px;
 }
 
