@@ -26,14 +26,14 @@
         style="height: 100%; position: relative"
       />
     </el-main>
-    <el-dialog title="文章发布" :visible.sync="tipsVisible">
+    <el-dialog title="文章发布" :visible.sync="tipsVisible" width=300px>
       您的文章是否要保存为草稿？
       <div slot="footer" class="dialog-footer">
         <el-button @click="cancelDraft">取 消</el-button>
         <el-button type="primary" @click="keepAndBack">确 定</el-button>
       </div>
     </el-dialog>
-    <el-dialog title="文章发布" :visible.sync="dialogFormVisible">
+    <el-dialog title="文章发布" :visible.sync="dialogFormVisible" width=300px>
       <el-form>
         <el-form-item label="添加标签:" label-width="100px">
           <el-tag
